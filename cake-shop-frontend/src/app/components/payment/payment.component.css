@@ -1,0 +1,269 @@
+.payment-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2, h3 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 18px;
+}
+
+.bill-details {
+  margin-bottom: 15px;
+}
+
+.bill-details p {
+  font-size: 14px;
+  margin: 3px 0;
+}
+
+.bill-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 15px;
+}
+
+.bill-table th, .bill-table td {
+  border: 1px solid #ccc;
+  padding: 6px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.bill-table th {
+  background-color: #ffb6c1;
+  color: white;
+}
+
+.bill-table tr:nth-child(even) {
+  background-color: #f0f0f0;
+}
+
+.bill-table tfoot {
+  font-weight: bold;
+}
+
+.custom-details-cell {
+  padding: 0;
+}
+
+.toggle-btn {
+  background-color: #ff69b4;
+  color: white;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  margin: 5px;
+  display: block;
+  width: fit-content;
+}
+
+.toggle-btn:hover {
+  background-color: #ff1493;
+}
+
+.custom-details {
+  padding: 8px;
+  background-color: #f9f9f9;
+  font-size: 12px;
+}
+
+.custom-details p {
+  margin: 2px 0;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.success-message {
+  color: green;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.pay-btn {
+  background-color: #ff9800;
+  color: white;
+}
+
+.pay-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.download-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.download-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.shopping-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.no-bill {
+  text-align: center;
+  padding: 15px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 15px;
+  border-radius: 8px;
+  max-width: 450px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 15px;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 14px;
+}
+
+.qr-code {
+  display: block;
+  margin: 8px auto;
+  width: 120px;
+  height: 120px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.pay-now-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.pay-now-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.cancel-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .payment-container {
+    padding: 10px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  .bill-details p, .bill-table th, .bill-table td, button {
+    font-size: 12px;
+  }
+
+  .bill-table th, .bill-table td {
+    padding: 4px;
+  }
+
+  .toggle-btn, .custom-details p {
+    font-size: 11px;
+  }
+
+  .modal-content {
+    max-width: 90%;
+    padding: 10px;
+  }
+
+  .qr-code {
+    width: 100px;
+    height: 100px;
+  }
+}

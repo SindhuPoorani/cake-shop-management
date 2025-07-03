@@ -1,0 +1,296 @@
+<div class="admin-container">
+  <header>
+    <img src="/assets/images/logo1.png" alt="Cake Delight" class="logo">
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </header>
+
+  <div class="content">
+    <aside class="sidebar">
+      <ul>
+        <li (click)="setActiveSection('add')" [class.active]="activeSection === 'add'">Add Item</li>
+        <li (click)="setActiveSection('update')" [class.active]="activeSection === 'update'">Update Item</li>
+        <li (click)="setActiveSection('delete')" [class.active]="activeSection === 'delete'">Delete Item</li>
+        <li (click)="setActiveSection('view')" [class.active]="activeSection === 'view'">View Items</li>
+        <li (click)="setActiveSection('orders')" [class.active]="activeSection === 'orders'">Manage Orders</li>
+      </ul>
+    </aside>
+
+    <main class="main-content">
+      <!-- Add Cake Section -->
+      <div *ngIf="activeSection === 'add'" class="section add-item-section">
+        <h2>Add New Item</h2>
+        <p *ngIf="addMessage" [style.color]="messageColor" class="message-container">
+          {{ addMessage }}
+          <button (click)="addMessage = ''" class="clear-message" aria-label="Clear message">×</button>
+        </p>
+        <form [formGroup]="addCakeForm" (ngSubmit)="addCake()" enctype="multipart/form-data" class="add-cake-form">
+          <div class="form-group">
+            <label for="name">Item Name</label>
+            <input id="name" type="text" formControlName="name" placeholder="Enter item name" required>
+            <div *ngIf="addCakeForm.get('name')?.invalid && addCakeForm.get('name')?.touched" class="error">
+              Item Name is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="price">Price (₹)</label>
+            <input id="price" type="number" formControlName="price" placeholder="Enter price" step="0.01" required>
+            <div *ngIf="addCakeForm.get('price')?.invalid && addCakeForm.get('price')?.touched" class="error">
+              Price is required and must be a positive number.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" formControlName="description" placeholder="Enter description" rows="4"
+              required></textarea>
+            <div *ngIf="addCakeForm.get('description')?.invalid && addCakeForm.get('description')?.touched"
+              class="error">
+              Description is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="image">Image</label>
+            <input id="image" type="file" (change)="onFileSelected($event, 'add')"
+              accept="image/jpeg,image/png,image/gif" required>
+            <div *ngIf="addCakeForm.get('image')?.invalid && addCakeForm.get('image')?.touched" class="error">
+              Image is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="weight">Weight (kg)</label>
+            <input id="weight" type="number" formControlName="weight" placeholder="Enter weight" step="0.01" required>
+            <div *ngIf="addCakeForm.get('weight')?.invalid && addCakeForm.get('weight')?.touched" class="error">
+              Weight is required and must be a positive number.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" formControlName="category" required>
+              <option value="" disabled selected>Select Category</option>
+              <option value="Cakes">Cakes</option>
+              <option value="Chocolate">Chocolate</option>
+              <option value="Puddings">Puddings</option>
+              <option value="Brownies and Dessert">Brownies and Dessert</option>
+              <option value="Cupcakes">Cupcakes</option>
+              <option value="Pastries">Pastries</option>
+              <option value="Cookies">Cookies</option>
+              <option value="Donuts">Donuts</option>
+            </select>
+            <div *ngIf="addCakeForm.get('category')?.invalid && addCakeForm.get('category')?.touched" class="error">
+              Category is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input id="quantity" type="number" formControlName="quantity" placeholder="Enter quantity" required>
+            <div *ngIf="addCakeForm.get('quantity')?.invalid && addCakeForm.get('quantity')?.touched" class="error">
+              Quantity is required and must be a positive number.
+            </div>
+          </div>
+          <div class="form-group submit-group">
+            <button class="btn" type="submit" [disabled]="addCakeForm.invalid">Add Item</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Update Cake Section -->
+      <div *ngIf="activeSection === 'update'" class="section">
+        <h2>Update Item</h2>
+        <p *ngIf="updateMessage" [style.color]="messageColor" class="message-container">
+          {{ updateMessage }}
+          <button (click)="updateMessage = ''" class="clear-message" aria-label="Clear message">×</button>
+        </p>
+        <form [formGroup]="updateForm" (ngSubmit)="fetchCakeToUpdate()" class="form-grid">
+          <div class="form-group">
+            <input type="text" formControlName="cakeId" placeholder="Enter Cake ID to Update" required>
+            <div *ngIf="updateForm.get('cakeId')?.invalid && updateForm.get('cakeId')?.touched" class="error">
+              Item ID is required.
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <button class="btn" type="submit" [disabled]="updateForm.get('cakeId')?.invalid">Fetch Item</button>
+          </div>
+        </form>
+
+        <div *ngIf="cakeToUpdate" class="update-details">
+          <h3>Update Item Details</h3>
+          <form [formGroup]="updateCakeForm" (ngSubmit)="updateCake()" enctype="multipart/form-data" class="form-grid">
+            <div class="form-group">
+              <input type="text" formControlName="name" placeholder="Cake Name" required>
+            </div>
+            <div class="form-group">
+              <input type="number" formControlName="price" placeholder="Price" step="0.01" required>
+            </div>
+            <div class="form-group">
+              <textarea formControlName="description" placeholder="Description" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+              <input type="file" (change)="onFileSelected($event, 'update')" accept="image/jpeg,image/png,image/gif">
+              <div *ngIf="cakeToUpdate.image">
+                <p>Current Image:</p>
+                <img [src]="'data:image/jpeg;base64,' + cakeToUpdate.image" alt="Current Cake Image" class="cake-image">
+              </div>
+            </div>
+            <div class="form-group">
+              <input type="number" formControlName="weight" placeholder="Weight (in kg)" step="0.01" required>
+            </div>
+            <div class="form-group">
+              <select formControlName="category" required>
+                <option value="" disabled>Select Category</option>
+                <option value="Cakes">Cakes</option>
+                <option value="Chocolate">Chocolate</option>
+                <option value="Puddings">Puddings</option>
+                <option value="Brownies and Dessert">Brownies and Dessert</option>
+                <option value="Cupcakes">Cupcakes</option>
+                <option value="Pastries">Pastries</option>
+                <option value="Cookies">Cookies</option>
+                <option value="Donuts">Donuts</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <input type="number" formControlName="quantity" placeholder="Quantity" required>
+              <div *ngIf="updateCakeForm.get('quantity')?.invalid && updateCakeForm.get('quantity')?.touched"
+                class="error">
+                Quantity is required and must be a number.
+              </div>
+            </div>
+            <div class="form-group full-width">
+              <button class="btn" type="submit" [disabled]="updateCakeForm.invalid">Save Changes</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Delete Cake Section -->
+      <div *ngIf="activeSection === 'delete'" class="section">
+        <h2>Delete Cake</h2>
+        <p *ngIf="deleteMessage" [style.color]="messageColor" class="message-container">
+          {{ deleteMessage }}
+          <button (click)="deleteMessage = ''" class="clear-message" aria-label="Clear message">×</button>
+        </p>
+        <form [formGroup]="deleteForm" (ngSubmit)="deleteCake()" class="form-grid">
+          <div class="form-group">
+            <input type="text" formControlName="cakeId" placeholder="Enter Cake ID to Delete" required>
+            <div *ngIf="deleteForm.get('cakeId')?.invalid && deleteForm.get('cakeId')?.touched" class="error">
+              Item ID is required.
+            </div>
+          </div>
+          <div class="form-group full-width">
+            <button class="btn" type="submit" [disabled]="deleteForm.get('cakeId')?.invalid">Delete Item</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- View Cakes Section with Category Filter -->
+      <div *ngIf="activeSection === 'view'" class="section">
+        <h2>View All Items</h2>
+        <div class="filter-section">
+          <label for="categoryFilter">Filter by Category:</label>
+          <select id="categoryFilter" [(ngModel)]="selectedCategory" (change)="filterCakes()" class="category-select">
+            <option value="">All</option>
+            <option value="Cakes">Cakes</option>
+            <option value="Chocolate">Chocolate</option>
+            <option value="Puddings">Puddings</option>
+            <option value="Brownies and Dessert">Brownies and Dessert</option>
+            <option value="Cupcakes">Cupcakes</option>
+            <option value="Pastries">Pastries</option>
+            <option value="Cookies">Cookies</option>
+            <option value="Donuts">Donuts</option>
+          </select>
+        </div>
+        <table *ngIf="filteredCakes.length > 0; else noCakes" class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Description</th>
+              <th>Image</th>
+              <th>Weight</th>
+              <th>Category</th>
+              <th>Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cake of filteredCakes; let i = index" [class.even-row]="i % 2 === 0">
+              <td>{{ cake.id }}</td>
+              <td>{{ cake.name }}</td>
+              <td>₹{{ cake.price.toFixed(2) }}</td>
+              <td>{{ cake.description | slice:0:50 }}{{ cake.description.length > 50 ? '...' : '' }}</td>
+              <td><img [src]="'data:image/jpeg;base64,' + cake.image" alt="{{ cake.name }}" class="cake-image"></td>
+              <td>{{ cake.weight }} kg</td>
+              <td>{{ cake.category }}</td>
+              <td>{{ cake.quantity }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <ng-template #noCakes>
+          <p class="no-data">No items found for the selected category.</p>
+        </ng-template>
+      </div>
+
+      <!-- Manage Orders Section -->
+      <div *ngIf="activeSection === 'orders'" class="section">
+        <h2>Manage Orders</h2>
+        <div class="filter-section">
+          <label for="statusFilter">Filter by Status:</label>
+          <select id="statusFilter" [(ngModel)]="selectedStatus" (change)="fetchOrders()" class="status-select">
+            <option value="">All</option>
+            <option value="pending">Pending</option>
+            <option value="on process">On Process</option>
+            <option value="delivered">Delivered</option>
+          </select>
+        </div>
+        <p *ngIf="orderErrorMessage" [style.color]="messageColor" class="message-container">
+          {{ orderErrorMessage }}
+          <button (click)="orderErrorMessage = ''" class="clear-message" aria-label="Clear message">×</button>
+        </p>
+        <table *ngIf="orders.length > 0; else noOrders" class="data-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>User</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Total Price</th>
+              <th>Items</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of orders; let i = index" [class.even-row]="i % 2 === 0">
+              <td>{{ order._id }}</td>
+              <td>{{ order.username }}</td>
+              <td>{{ formatDate(order.date) }}</td>
+              <td>{{ order.time }}</td>
+              <td>₹{{ order.totalPrice.toFixed(2) }}</td>
+              <td>
+                <ul>
+                  <li *ngFor="let item of order.items">
+                    {{ item.name }} ({{ item.category }}) - {{ item.quantity }} x ₹{{ item.price.toFixed(2) }}
+                  </li>
+                </ul>
+              </td>
+              <td [class.delivered-status]="isOrderDelivered(order)">
+                {{ order.status === 'on process' ? 'On Process' : (order.status.charAt(0).toUpperCase() +
+                order.status.slice(1)) }}
+              </td>
+              <td>
+                <select [(ngModel)]="order.status" (change)="updateOrderStatus(order._id, order.status)"
+                  class="status-select" [disabled]="isStatusChangeDisabled(order)"
+                  [attr.aria-label]="'Status for order ' + order._id">
+                  <option value="pending" [disabled]="isPendingDisabled(order)">Pending</option>
+                  <option value="on process" [disabled]="isOnProcessDisabled(order)">On Process</option>
+                  <option value="delivered" [disabled]="isDeliveredDisabled(order)">Delivered</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <ng-template #noOrders>
+          <p class="no-data">No orders found for the selected status.</p>
+        </ng-template>
+      </div>
+    </main>
+  </div>
+</div>

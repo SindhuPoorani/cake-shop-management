@@ -1,0 +1,50 @@
+<div class="cart-container">
+  <!-- Back Button -->
+  <button class="btn back-btn" (click)="goBack()" [attr.aria-label]="'Go back to previous page'">Back</button>
+
+  <h2>Your Cart</h2>
+  <div *ngIf="cart.length === 0" class="empty-cart">
+    <p>Your cart is empty. <a routerLink="/dashboard">Start shopping</a></p>
+  </div>
+  <div *ngIf="cart.length > 0" class="cart-items">
+    <div class="cart-item" *ngFor="let item of cart; let i = index">
+      <img [src]="'data:image/jpeg;base64,' + item.image" alt="{{ item.name }}" class="item-image">
+      <div class="item-details">
+        <h3>{{ item.name }}</h3>
+        <p>Price: ₹{{ item.price }}</p>
+        <p>Category: {{ item.category }}</p>
+        <!-- Toggleable Custom Details -->
+        <div *ngIf="item.category === 'custom' && item.customCakeId" class="custom-details-toggle">
+          <button class="toggle-btn" (click)="toggleDetails(i)" [attr.aria-label]="showDetails[i] ? 'Hide details for ' + item.name : 'Show details for ' + item.name">
+            {{ showDetails[i] ? 'Hide Details' : 'View Details' }}
+          </button>
+          <div *ngIf="showDetails[i]" class="custom-details">
+            <p><strong>Custom Details:</strong></p>
+            <p>Flavor: {{ item.customCakeId.customDetails.flavor }}</p>
+            <p>Size: {{ item.customCakeId.customDetails.size }}</p>
+            <p>Frosting: {{ item.customCakeId.customDetails.frostingType }} ({{ item.customCakeId.customDetails.frostingColor }})</p>
+            <p>Toppings: {{ item.customCakeId.customDetails.toppings.join(', ') || 'None' }}</p>
+            <p>Filling: {{ item.customCakeId.customDetails.filling || 'None' }}</p>
+            <p>Shape: {{ item.customCakeId.customDetails.shape }}</p>
+            <p>Decorative Elements: {{ item.customCakeId.customDetails.decorativeElements.join(', ') || 'None' }}</p>
+            <p>Message: {{ item.customCakeId.customDetails.message || 'None' }}</p>
+            <p>Occasion: {{ item.customCakeId.customDetails.occasion === 'Other' ? item.customCakeId.customDetails.customOccasion : item.customCakeId.customDetails.occasion }}</p>
+            <p>Dietary Preferences: {{ item.customCakeId.customDetails.dietaryPreferences.join(', ') || 'None' }}</p>
+          </div>
+        </div>
+        <div class="quantity-controls">
+          <label for="quantity-{{i}}">Quantity:</label>
+          <input type="number" id="quantity-{{i}}" [(ngModel)]="item.quantity" [min]="1" [max]="availableQuantities[item.id] + item.quantity" [attr.aria-label]="'Adjust quantity for ' + item.name">
+          <button class="update-btn" (click)="updateItem(i)" [attr.aria-label]="'Update quantity for ' + item.name">Update</button>
+          <button class="remove-btn" (click)="removeItem(i)" [attr.aria-label]="'Remove ' + item.name + ' from cart'">Remove</button>
+        </div>
+      </div>
+    </div>
+    <div class="cart-summary">
+      <p>Total: ₹{{ totalPrice }}</p>
+      <button class="checkout-btn" (click)="generateBill()" [disabled]="cart.length === 0" [attr.aria-label]="'Generate bill'">Generate Bill</button>
+      <p *ngIf="message" [style.color]="messageColor">{{ message }}</p>
+      <button *ngIf="showBackButton" class="back-btn" (click)="goBackToDashboard()" [attr.aria-label]="'Back to Dashboard'">Back to Dashboard</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,151 @@
+<div class="custom-cake-builder-container">
+    <h2>Create Your Custom Cake</h2>
+  
+    <!-- Error Message -->
+    @if (errorMessage) {
+      <div class="error-message">
+        {{ errorMessage }}
+        <button (click)="clearError()" class="clear-error" aria-label="Clear error message">×</button>
+      </div>
+    }
+  
+    <form (ngSubmit)="addToCart()">
+      <!-- Flavor -->
+      <div class="form-group">
+        <label for="flavor">Flavor <span class="required">*</span></label>
+        <select id="flavor" [(ngModel)]="customDetails.flavor" name="flavor" required (change)="calculatePrice()">
+          <option value="">Select Flavor</option>
+          <option value="Chocolate">Chocolate</option>
+          <option value="Vanilla">Vanilla</option>
+          <option value="Strawberry">Strawberry</option>
+          <option value="Lemon">Lemon</option>
+        </select>
+      </div>
+  
+      <!-- Size -->
+      <div class="form-group">
+        <label for="size">Size <span class="required">*</span></label>
+        <select id="size" [(ngModel)]="customDetails.size" name="size" required (change)="calculatePrice()">
+          <option value="">Select Size</option>
+          <option value="500g">500g</option>
+          <option value="1kg">1kg</option>
+          <option value="2kg">2kg</option>
+        </select>
+      </div>
+  
+      <!-- Frosting Type -->
+      <div class="form-group">
+        <label for="frostingType">Frosting Type <span class="required">*</span></label>
+        <select id="frostingType" [(ngModel)]="customDetails.frostingType" name="frostingType" required (change)="calculatePrice()">
+          <option value="">Select Frosting Type</option>
+          <option value="Buttercream">Buttercream</option>
+          <option value="Fondant">Fondant</option>
+          <option value="Whipped Cream">Whipped Cream</option>
+        </select>
+      </div>
+  
+      <!-- Frosting Color -->
+      <div class="form-group">
+        <label for="frostingColor">Frosting Color <span class="required">*</span></label>
+        <select id="frostingColor" [(ngModel)]="customDetails.frostingColor" name="frostingColor" required (change)="calculatePrice()">
+          <option value="">Select Frosting Color</option>
+          <option value="Blue">Blue</option>
+          <option value="Pink">Pink</option>
+          <option value="White">White</option>
+          <option value="Red">Red</option>
+        </select>
+      </div>
+  
+      <!-- Toppings -->
+      <div class="form-group">
+        <label>Toppings</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" (change)="updateArrayField('toppings', 'Sprinkles', $event)" /> Sprinkles</label>
+          <label><input type="checkbox" (change)="updateArrayField('toppings', 'Chocolate Chips', $event)" /> Chocolate Chips</label>
+          <label><input type="checkbox" (change)="updateArrayField('toppings', 'Fruit', $event)" /> Fruit</label>
+        </div>
+      </div>
+  
+      <!-- Filling -->
+      <div class="form-group">
+        <label for="filling">Filling</label>
+        <select id="filling" [(ngModel)]="customDetails.filling" name="filling" (change)="calculatePrice()">
+          <option value="">None</option>
+          <option value="Chocolate Ganache">Chocolate Ganache</option>
+          <option value="Cream Cheese">Cream Cheese</option>
+          <option value="Fruit Jam">Fruit Jam</option>
+        </select>
+      </div>
+  
+      <!-- Shape -->
+      <div class="form-group">
+        <label for="shape">Shape <span class="required">*</span></label>
+        <select id="shape" [(ngModel)]="customDetails.shape" name="shape" required (change)="calculatePrice()">
+          <option value="">Select Shape</option>
+          <option value="Round">Round</option>
+          <option value="Square">Square</option>
+          <option value="Heart">Heart</option>
+        </select>
+      </div>
+  
+      <!-- Decorative Elements -->
+      <div class="form-group">
+        <label>Decorative Elements</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" (change)="updateArrayField('decorativeElements', 'Flowers', $event)" /> Flowers</label>
+          <label><input type="checkbox" (change)="updateArrayField('decorativeElements', 'Bows', $event)" /> Bows</label>
+          <label><input type="checkbox" (change)="updateArrayField('decorativeElements', 'Candles', $event)" /> Candles</label>
+        </div>
+      </div>
+  
+      <!-- Message -->
+      <div class="form-group">
+        <label for="message">Message on Cake</label>
+        <input type="text" id="message" [(ngModel)]="customDetails.message" name="message" maxlength="50" (change)="calculatePrice()" />
+      </div>
+  
+      <!-- Occasion -->
+      <div class="form-group">
+        <label for="occasion">Occasion <span class="required">*</span></label>
+        <select id="occasion" [(ngModel)]="customDetails.occasion" name="occasion" required (change)="customDetails.customOccasion = ''; calculatePrice()">
+          <option value="">Select Occasion</option>
+          <option value="Birthday">Birthday</option>
+          <option value="Anniversary">Anniversary</option>
+          <option value="Wedding">Wedding</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+  
+      <!-- Custom Occasion (if Other is selected) -->
+      @if (customDetails.occasion === 'Other') {
+        <div class="form-group">
+          <label for="customOccasion">Custom Occasion <span class="required">*</span></label>
+          <input type="text" id="customOccasion" [(ngModel)]="customDetails.customOccasion" name="customOccasion" required (change)="calculatePrice()" />
+        </div>
+      }
+  
+      <!-- Dietary Preferences -->
+      <div class="form-group">
+        <label>Dietary Preferences</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" (change)="updateArrayField('dietaryPreferences', 'Eggless', $event)" /> Eggless</label>
+          <label><input type="checkbox" (change)="updateArrayField('dietaryPreferences', 'Gluten-Free', $event)" /> Gluten-Free</label>
+          <label><input type="checkbox" (change)="updateArrayField('dietaryPreferences', 'Vegan', $event)" /> Vegan</label>
+        </div>
+      </div>
+  
+      <!-- Quantity -->
+      <div class="form-group">
+        <label for="quantity">Quantity <span class="required">*</span></label>
+        <input type="number" id="quantity" [(ngModel)]="quantity" name="quantity" min="1" max="10" required (change)="clearError(); calculatePrice()" />
+      </div>
+  
+      <!-- Price Display -->
+      <div class="form-group price-display">
+        <p><strong>Price:</strong> ₹{{ formattedPrice }}</p>
+      </div>
+  
+      <!-- Submit Button -->
+      <button type="submit" class="submit-btn">Add to Cart</button>
+    </form>
+  </div>

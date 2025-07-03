@@ -1,0 +1,124 @@
+:host {
+    display: block;
+    background-image: url('/assets/images/bg.jpg');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    padding: 50px;
+  }
+  
+  .login-container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    display: inline-block;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    max-width: 350px;
+    width: 100%;
+  }
+  .clear-message {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.2em;
+    cursor: pointer;
+    margin-left: 8px;
+  }
+  h2 {
+    color: #ff6699;
+    margin-bottom: 20px;
+  }
+  
+  input {
+    width: 90%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  label {
+    display: block;
+    text-align: left;  /* Ensures labels are aligned to the left */
+    margin-bottom: 5px; /* Optional: Adds spacing between label and input */
+    color: #333333; /* Dark color */
+    font-weight: bold; /* Makes the label text bold */
+  }
+  .back-btn {
+    margin-top: 20px; /* Adjust the value as needed */
+  }
+  
+    
+  
+  .btn {
+    background-color: #ff6699;
+    color: white;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 95%;
+    font-size: 16px;
+    transition: 0.3s;
+  }
+  
+  .btn:hover {
+    background-color: #ff3366;
+  }
+  
+  .btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .logo {
+    max-width: 100px;
+    height: auto;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .forgot-password {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  
+  .forgot-password a {
+    color: #ff3366;
+    text-decoration: none;
+  }
+  
+  .forgot-password a:hover {
+    text-decoration: underline;
+  }
+  
+  .signup-link {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  
+  .signup-link a {
+    color: #ff3366;
+    text-decoration: none;
+  }
+  
+  .signup-link a:hover {
+    text-decoration: underline;
+  }
+  
+  #loginMessage {
+    font-size: 14px;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+  
+  .error {
+    color: red;
+    font-size: 14px;
+    margin-top: -8px;
+    margin-bottom: 8px;
+  }

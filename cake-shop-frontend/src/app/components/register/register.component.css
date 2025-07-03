@@ -1,0 +1,81 @@
+:host {
+  display: block;
+  background-image: url('/assets/images/back4.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  padding: 50px;
+}
+.signup-container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    display: inline-block;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    max-width: 700px;
+    width: 100%;
+  }
+  
+  h2 {
+    color: #ff6699;
+    margin-bottom: 20px;
+  }
+  
+  input, textarea {
+    width: 90%;
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .btn {
+    background-color: #ff6699;
+    color: white;
+    border: none;
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 95%;
+    font-size: 18px;
+    transition: 0.3s;
+  }
+  
+  .btn:hover {
+    background-color: #ff3366;
+  }
+  
+  .btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .already-member {
+    margin-top: 10px;
+    font-size: 14px;
+  }
+  
+  .already-member a {
+    color: #ff3366;
+    text-decoration: none;
+  }
+  
+  .already-member a:hover {
+    text-decoration: underline;
+  }
+  
+  #signupMessage, #usernameMessage {
+    font-size: 14px;
+    margin-top: 5px;
+    display: block;
+  }
+  
+  .error {
+    color: red;
+    font-size: 14px;
+    margin-top: -8px;
+    margin-bottom: 8px;
+  }

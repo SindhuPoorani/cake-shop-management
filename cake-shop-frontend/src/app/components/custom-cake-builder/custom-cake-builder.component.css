@@ -1,0 +1,70 @@
+.custom-cake-builder {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+  }
+  
+  .container {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .form-section {
+    flex: 1;
+  }
+  
+  .visualization-section {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .step {
+    margin-bottom: 20px;
+  }
+  
+  .step h3 {
+    color: #ff69b4;
+  }
+  
+  select,
+  input[type="text"],
+  input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  label {
+    display: block;
+    margin: 5px 0;
+  }
+  
+  .price-preview {
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  button {
+    background-color: #ff69b4;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin: 5px;
+    cursor: pointer;
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  canvas {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  }

@@ -1,0 +1,70 @@
+<div class="homepage">
+  <!-- Header Section -->
+  <nav class="navbar">
+    <div class="logo">
+      <img src="/assets/images/logo1.png" alt="FROSTLAND LOGO" class="logo">
+    </div>
+    <div class="menu">
+      <a href="#about">About</a>
+      <a href="#categories">Categories</a>
+      
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="buttons">
+      <button class="btn" routerLink="/login">Login</button>
+      <button class="btn" routerLink="/register">Sign Up</button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content">
+      <button class="shop-now-btn" (click)="onShopNowClick()">Shop Now</button>
+    </div>
+  </section>
+
+  <!-- Categories Section -->
+  <section id="categories" class="categories">
+    <h2>Explore Our Categories</h2>
+    <div class="category-grid">
+      <div *ngFor="let category of categories" class="category-item" (click)="onCategoryClick()">
+        <img [src]="category.image" [alt]="category.name + ' Image'" class="category-image">
+        <div class="category-overlay">
+          <span>{{ category.name }}</span>
+        </div>
+        <div class="category-name">{{ category.name }}</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="shop-info">
+    <div class="about-content">
+      <div class="about-image">
+        <img src="/assets/images/ice cake.jpg" alt="About FrostLand Cake Shop">
+      </div>
+      <div class="about-text">
+        <h2>About Our Cake Shop</h2>
+        <p>
+          We have been serving mouth-watering cakes for over 10 years. Our expert bakers ensure the highest quality
+          ingredients and the most delightful flavors. At FrostLand Cake Shop, we believe that every occasion deserves a
+          touch of sweetness! Since our humble beginnings, we have been crafting fresh, handcrafted cakes, pastries, and
+          desserts that bring joy to our customers. Our commitment to quality, creativity, and customer satisfaction makes
+          us stand out.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <footer id="contact" class="contact">
+    <h2>Contact Us</h2>
+    <div class="contact-info">
+      <p><strong>Email:</strong> contact&#64;frostlandcakes.com</p>
+      <p><strong>Phone:</strong> +91-9876543210</p>
+      <p><strong>Location:</strong> 123 Sweet Street, Malad West, Mumbai, Maharashtra 400064</p>
+      
+    </div>
+    <p class="copyright">© 2025 FrostLand Cake Shop. All Rights Reserved.</p>
+  </footer>
+</div>

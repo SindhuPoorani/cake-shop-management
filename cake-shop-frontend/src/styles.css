@@ -1,0 +1,46 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8e1e7;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+  @media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .logo {
+        width: 100px;
+        height: auto;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 12px;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+/* Extra small devices (portrait phones) */
+@media (max-width: 480px) {
+    .nav-bar {
+        font-size: 14px;
+    }
+}

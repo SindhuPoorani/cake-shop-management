@@ -1,0 +1,62 @@
+<div class="profile-container">
+  <header>
+    <div class="logo-placeholder">Cake Delight</div>
+    <button class="logout-btn" (click)="logout()">Logout</button>
+    <button class="back-btn" (click)="goBack()">Back to Dashboard</button>
+  </header>
+
+  <main class="profile-content">
+    <h1>User Profile</h1>
+
+    <!-- Display Mode -->
+    <div *ngIf="!isEditing" class="profile-details">
+      <p><strong>Full Name:</strong> {{ user?.fullname }}</p>
+      <p><strong>Email:</strong> {{ user?.email }}</p>
+      <p><strong>Username:</strong> {{ user?.username }}</p>
+      <p><strong>Mobile:</strong> {{ user?.mobile }}</p>
+      <p><strong>Address:</strong> {{ user?.address }}</p>
+      <button class="btn edit-btn" (click)="toggleEdit()">Edit Profile</button>
+    </div>
+
+    <!-- Edit Mode -->
+    <div *ngIf="isEditing" class="edit-form">
+      <form [formGroup]="updateForm" (ngSubmit)="updateProfile()">
+        <div class="form-group">
+          <label for="fullname">Full Name:</label>
+          <input type="text" id="fullname" formControlName="fullname" required>
+          <div *ngIf="updateForm.get('fullname')?.invalid && updateForm.get('fullname')?.touched" class="error">
+            Full Name is required.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" id="email" formControlName="email" required>
+          <div *ngIf="updateForm.get('email')?.invalid && updateForm.get('email')?.touched" class="error">
+            Valid Email is required.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="mobile">Mobile:</label>
+          <input type="text" id="mobile" formControlName="mobile" required>
+          <div *ngIf="updateForm.get('mobile')?.invalid && updateForm.get('mobile')?.touched" class="error">
+            Mobile is required.
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="address">Address:</label>
+          <textarea id="address" formControlName="address" rows="3" required></textarea>
+          <div *ngIf="updateForm.get('address')?.invalid && updateForm.get('address')?.touched" class="error">
+            Address is required.
+          </div>
+        </div>
+
+        <button type="submit" class="btn save-btn" [disabled]="updateForm.invalid">Save Changes</button>
+        <button type="button" class="btn cancel-btn" (click)="toggleEdit()">Cancel</button>
+      </form>
+      <p [style.color]="messageColor">{{ updateMessage }}</p>
+    </div>
+  </main>
+</div>

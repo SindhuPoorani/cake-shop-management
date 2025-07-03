@@ -1,0 +1,150 @@
+<div class="payment-container">
+  <div *ngIf="bill; else noBill">
+    <h2>FrostLand Cake Shop - Invoice</h2>
+    <div class="bill-details">
+      <p><strong>Date:</strong> {{ bill.date || 'N/A' }}</p>
+      <p><strong>Time:</strong> {{ bill.time || 'N/A' }}</p>
+      <h3>Items Purchased:</h3>
+      <table class="bill-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngFor="let item of bill.items; let i = index">
+            <tr>
+              <td>{{ i + 1 }}</td>
+              <td>{{ item.name || 'N/A' }}</td>
+              <td>{{ item.category || 'N/A' }}</td>
+              <td>{{ item.quantity || 0 }}</td>
+              <td>₹{{ (item.price || 0).toFixed(2) }}</td>
+              <td>₹{{ ((item.price || 0) * (item.quantity || 0)).toFixed(2) }}</td>
+            </tr>
+            <!-- Collapsible Custom Details Row -->
+            <tr *ngIf="item.category === 'custom' && item.customCakeId">
+              <td colspan="6" class="custom-details-cell">
+                <button class="toggle-btn" (click)="toggleDetails(i)" [attr.aria-label]="showDetails[i] ? 'Hide details for ' + item.name : 'Show details for ' + item.name">
+                  {{ showDetails[i] ? 'Hide Details' : 'View Details' }}
+                </button>
+                <div *ngIf="showDetails[i]" class="custom-details">
+                  <p><strong>Custom Details:</strong></p>
+                  <p>Flavor: {{ item.customCakeId.customDetails.flavor }}</p>
+                  <p>Size: {{ item.customCakeId.customDetails.size }}</p>
+                  <p>Frosting: {{ item.customCakeId.customDetails.frostingType }} ({{ item.customCakeId.customDetails.frostingColor }})</p>
+                  <p>Toppings: {{ item.customCakeId.customDetails.toppings.join(', ') || 'None' }}</p>
+                  <p>Filling: {{ item.customCakeId.customDetails.filling || 'None' }}</p>
+                  <p>Shape: {{ item.customCakeId.customDetails.shape }}</p>
+                  <p>Decorative Elements: {{ item.customCakeId.customDetails.decorativeElements.join(', ') || 'None' }}</p>
+                  <p>Message: {{ item.customCakeId.customDetails.message || 'None' }}</p>
+                  <p>Occasion: {{ item.customCakeId.customDetails.occasion === 'Other' ? item.customCakeId.customDetails.customOccasion : item.customCakeId.customDetails.occasion }}</p>
+                  <p>Dietary Preferences: {{ item.customCakeId.customDetails.dietaryPreferences.join(', ') || 'None' }}</p>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="5"><strong>Total:</strong></td>
+            <td><strong>₹{{ (bill.totalPrice || 0).toFixed(2) }}</strong></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- Error/Success Message -->
+    <p *ngIf="errorMessage" [ngClass]="{'error-message': errorMessage !== 'Payment successful!', 'success-message': errorMessage === 'Payment successful!'}">
+      {{ errorMessage }}
+    </p>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button class="pay-btn" (click)="openPaymentModal()" [disabled]="isPaid" [attr.aria-label]="'Pay Bill'">Pay Bill</button>
+      <button class="download-btn" (click)="downloadBillAsPDF()" [disabled]="!isPaid" [attr.aria-label]="'Download Bill as PDF'">Download Bill as PDF</button>
+      <button class="shopping-btn" (click)="goShopping()" [attr.aria-label]="'Go Shopping'">Go Shopping</button>
+    </div>
+  </div>
+
+  <!-- Payment Modal -->
+  <div *ngIf="showPaymentModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3>Make Payment</h3>
+      <form [formGroup]="paymentForm" (ngSubmit)="submitPayment()">
+        <!-- Payment Method Selection -->
+        <div class="form-group">
+          <label>Payment Method:</label>
+          <div class="radio-group">
+            <label>
+              <input type="radio" formControlName="paymentMethod" value="card" (change)="updatePaymentMethod('card')" checked>
+              Card
+            </label>
+            <label>
+              <input type="radio" formControlName="paymentMethod" value="upi" (change)="updatePaymentMethod('upi')">
+              UPI
+            </label>
+          </div>
+        </div>
+
+        <!-- Card Payment Fields -->
+        <div *ngIf="selectedPaymentMethod === 'card'" class="form-group">
+          <label for="cardNumber">Card Number</label>
+          <input id="cardNumber" formControlName="cardNumber" placeholder="1234 5678 9012 3456" maxlength="16">
+          <div *ngIf="paymentForm.get('cardNumber')?.invalid && paymentForm.get('cardNumber')?.touched" class="error">
+            Enter a valid 16-digit card number.
+          </div>
+
+          <label for="expiryDate">Expiry Date</label>
+          <input id="expiryDate" formControlName="expiryDate" placeholder="MM/YY" maxlength="5">
+          <div *ngIf="paymentForm.get('expiryDate')?.invalid && paymentForm.get('expiryDate')?.touched" class="error">
+            Enter a valid expiry date (MM/YY).
+          </div>
+
+          <label for="cvv">CVV</label>
+          <input id="cvv" formControlName="cvv" placeholder="123" maxlength="3" type="password">
+          <div *ngIf="paymentForm.get('cvv')?.invalid && paymentForm.get('cvv')?.touched" class="error">
+            Enter a valid 3-digit CVV.
+          </div>
+
+          <label for="cardholderName">Cardholder Name</label>
+          <input id="cardholderName" formControlName="cardholderName" placeholder="John Doe">
+          <div *ngIf="paymentForm.get('cardholderName')?.invalid && paymentForm.get('cardholderName')?.touched" class="error">
+            Enter a valid name.
+          </div>
+        </div>
+
+        <!-- UPI Payment Fields -->
+        <div *ngIf="selectedPaymentMethod === 'upi'" class="form-group">
+          <label>Scan QR Code or Enter UPI ID</label>
+          <!-- Display QR code if available -->
+          <img *ngIf="qrCodeUrl" [src]="qrCodeUrl" alt="UPI QR Code" class="qr-code">
+          <!-- Show loading message if QR code is not yet generated -->
+          <p *ngIf="!qrCodeUrl && selectedPaymentMethod === 'upi'" class="error">Generating QR code...</p>
+          <label for="upiId">UPI ID</label>
+          <input id="upiId" formControlName="upiId" placeholder="user&#64;bank">
+          <div *ngIf="paymentForm.get('upiId')?.invalid && paymentForm.get('upiId')?.touched" class="error">
+            Enter a valid UPI ID (e.g., user&#64;bank).
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button type="submit" class="pay-now-btn" [disabled]="paymentForm.invalid" [attr.aria-label]="'Pay Now'">Pay Now</button>
+          <button type="button" class="cancel-btn" (click)="closePaymentModal()" [attr.aria-label]="'Cancel Payment'">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <ng-template #noBill>
+    <div class="no-bill">
+      <p>{{ errorMessage || 'No bill data available.' }}</p>
+      <button class="shopping-btn" (click)="goShopping()" [attr.aria-label]="'Go Shopping'">Go Shopping</button>
+    </div>
+  </ng-template>
+</div>

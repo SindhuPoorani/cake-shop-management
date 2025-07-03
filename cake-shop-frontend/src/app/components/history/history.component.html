@@ -1,0 +1,64 @@
+<div class="history-container">
+  <h2>Purchase History</h2>
+
+  <div *ngIf="isLoading" class="loading">
+    Loading your history...
+  </div>
+
+  <p *ngIf="message && !isLoading" [style.color]="messageColor" role="alert" class="message-container">
+    <span [innerHTML]="message"></span>
+    <button (click)="clearMessage()" class="clear-message" aria-label="Clear message">×</button>
+  </p>
+
+  <div *ngIf="!isLoading && history.length > 0" class="history-table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Total Price</th>
+          <th>Items</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let entry of history">
+          <td>{{ formatDate(entry.date) }}</td>
+          <td>{{ entry.time }}</td>
+          <td>₹{{ entry.totalPrice.toFixed(2) }}</td>
+          <td>
+            <ul class="items-list">
+              <li *ngFor="let item of entry.items; let i = index">
+                {{ item.name }} (Qty: {{ item.quantity }}, ₹{{ item.price.toFixed(2) }} each, {{ item.category }})
+                <!-- Collapsible Custom Details -->
+                <div *ngIf="item.category === 'custom' && item.customCakeId" class="custom-details-toggle">
+                  <button class="toggle-btn" (click)="toggleDetails(entry._id, i)" [attr.aria-label]="getShowDetails(entry._id, i) ? 'Hide details for ' + item.name : 'Show details for ' + item.name">
+                    {{ getShowDetails(entry._id, i) ? 'Hide Details' : 'View Details' }}
+                  </button>
+                  <div *ngIf="getShowDetails(entry._id, i)" class="custom-details">
+                    <p><strong>Custom Details:</strong></p>
+                    <p>Flavor: {{ item.customCakeId.customDetails.flavor }}</p>
+                    <p>Size: {{ item.customCakeId.customDetails.size }}</p>
+                    <p>Frosting: {{ item.customCakeId.customDetails.frostingType }} ({{ item.customCakeId.customDetails.frostingColor }})</p>
+                    <p>Toppings: {{ item.customCakeId.customDetails.toppings.join(', ') || 'None' }}</p>
+                    <p>Filling: {{ item.customCakeId.customDetails.filling || 'None' }}</p>
+                    <p>Shape: {{ item.customCakeId.customDetails.shape }}</p>
+                    <p>Decorative Elements: {{ item.customCakeId.customDetails.decorativeElements.join(', ') || 'None' }}</p>
+                    <p>Message: {{ item.customCakeId.customDetails.message || 'None' }}</p>
+                    <p>Occasion: {{ item.customCakeId.customDetails.occasion === 'Other' ? item.customCakeId.customDetails.customOccasion : item.customCakeId.customDetails.occasion }}</p>
+                    <p>Dietary Preferences: {{ item.customCakeId.customDetails.dietaryPreferences.join(', ') || 'None' }}</p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!isLoading && history.length === 0 && !message" class="no-history">
+    <p>No delivered orders found. Check your <a routerLink="/track-order">Track Order</a> page for active orders.</p>
+  </div>
+
+  <button class="back-btn" (click)="goBackToDashboard()" [attr.aria-label]="'Back to Dashboard'">Back to Dashboard</button>
+</div>

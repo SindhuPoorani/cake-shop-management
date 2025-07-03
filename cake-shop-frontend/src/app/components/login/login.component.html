@@ -1,0 +1,65 @@
+<div class="login-container">
+  <img src="/assets/images/logo1.png" alt="Frostland Logo" class="logo">
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input 
+        id="username" 
+        type="text" 
+        formControlName="username" 
+        placeholder="Enter Username" 
+        [attr.aria-invalid]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched"
+        [attr.aria-describedby]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched ? 'username-error' : null"
+        (focus)="clearMessage()">
+      <div 
+        id="username-error" 
+        *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" 
+        class="error" 
+        role="alert">
+        <span *ngIf="loginForm.get('username')?.errors?.['required']">Username is required.</span>
+        <span *ngIf="loginForm.get('username')?.errors?.['minlength']">Username must be at least 3 characters long.</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input 
+        id="password" 
+        type="password" 
+        formControlName="password" 
+        placeholder="Enter Password" 
+        [attr.aria-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+        [attr.aria-describedby]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched ? 'password-error' : null"
+        (focus)="clearMessage()">
+      <div 
+        id="password-error" 
+        *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" 
+        class="error" 
+        role="alert">
+        <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required.</span>
+        <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters long.</span>
+      </div>
+    </div>
+
+    <button class="btn" type="submit" [disabled]="loginForm.invalid || isLoading">
+      <span *ngIf="!isLoading">Login</span>
+      <span *ngIf="isLoading" class="spinner"></span>
+    </button>
+  </form>
+
+  <div class="forgot-password">
+    <a routerLink="/forgot-password" [attr.aria-label]="'Navigate to forgot password page'">Forgot Password?</a>
+  </div>
+
+  <p class="signup-link">Don't have an account? <a routerLink="/register">Register</a></p>
+
+  <p id="loginMessage" [style.color]="messageColor" *ngIf="loginMessage" role="alert">
+    {{ loginMessage }}
+    <button *ngIf="loginMessage" (click)="clearMessage()" class="clear-message" aria-label="Clear message">
+      ×
+    </button>
+  </p>
+
+  <button class="btn back-btn" (click)="goBackToHome()" [disabled]="isLoading">← Back to Home</button>
+</div>

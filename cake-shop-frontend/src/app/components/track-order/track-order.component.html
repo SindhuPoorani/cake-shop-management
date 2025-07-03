@@ -1,0 +1,58 @@
+<div class="track-order-container">
+  <!-- Back Button -->
+  <button class="btn back-btn" (click)="goBack()">Back</button>
+
+  <h1>Track Your Orders</h1>
+  <p class="description">Here you can track the status of your active orders (Pending or On Process).</p>
+
+  <div *ngIf="isLoading" class="loading">
+    Loading your orders...
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="orders.length === 0 && !errorMessage && !isLoading" class="no-orders">
+    <p>No active orders found. Start shopping to place an order!</p>
+  </div>
+
+  <div class="order-list" *ngIf="orders.length > 0 && !isLoading">
+    <div *ngFor="let order of orders" class="order-card">
+      <div class="order-header">
+        <h2>Order on {{ formatDate(order.date) }} at {{ order.time }}</h2>
+        <span class="status {{ order.status.toLowerCase() }}">
+          {{ order.status === 'on process' ? 'On Process' : (order.status.charAt(0).toUpperCase() + order.status.slice(1)) }}
+        </span>
+      </div>
+      <div class="order-details">
+        <p><strong>Total Price:</strong> ₹{{ order.totalPrice.toFixed(2) }}</p>
+        <h3>Items:</h3>
+        <ul>
+          <li *ngFor="let item of order.items; let i = index">
+            {{ item.name }} ({{ item.category }}) - {{ item.quantity }} x ₹{{ item.price.toFixed(2) }}
+            <!-- Collapsible Custom Details -->
+            <div *ngIf="item.category === 'custom' && item.customCakeId" class="custom-details-toggle">
+              <button class="toggle-btn" (click)="toggleDetails(order._id, i)" [attr.aria-label]="getShowDetails(order._id, i) ? 'Hide details for ' + item.name : 'Show details for ' + item.name">
+                {{ getShowDetails(order._id, i) ? 'Hide Details' : 'View Details' }}
+              </button>
+              <div *ngIf="getShowDetails(order._id, i)" class="custom-details">
+                <p><strong>Custom Details:</strong></p>
+                <p>Flavor: {{ item.customCakeId.customDetails.flavor }}</p>
+                <p>Size: {{ item.customCakeId.customDetails.size }}</p>
+                <p>Frosting: {{ item.customCakeId.customDetails.frostingType }} ({{ item.customCakeId.customDetails.frostingColor }})</p>
+                <p>Toppings: {{ item.customCakeId.customDetails.toppings.join(', ') || 'None' }}</p>
+                <p>Filling: {{ item.customCakeId.customDetails.filling || 'None' }}</p>
+                <p>Shape: {{ item.customCakeId.customDetails.shape }}</p>
+                <p>Decorative Elements: {{ item.customCakeId.customDetails.decorativeElements.join(', ') || 'None' }}</p>
+                <p>Message: {{ item.customCakeId.customDetails.message || 'None' }}</p>
+                <p>Occasion: {{ item.customCakeId.customDetails.occasion === 'Other' ? item.customCakeId.customDetails.customOccasion : item.customCakeId.customDetails.occasion }}</p>
+                <p>Dietary Preferences: {{ item.customCakeId.customDetails.dietaryPreferences.join(', ') || 'None' }}</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+<header>
+  <div class="logo-placeholder">FrostLand</div>
+  <div class="header-buttons">
+    <button [routerLink]="['/custom-cake']" class="customize-btn">Customize Your Cake</button>
+    <button class="profile-btn" (click)="navigateToProfile()" aria-label="Go to profile">Profile</button>
+    <button class="cart-btn" (click)="navigateToCart()" [class.active]="cartCount > 0" [attr.aria-label]="'View cart with ' + cartCount + ' items'">
+      View Cart ({{ cartCount }})
+    </button>
+    <button class="track-btn" routerLink="/track-order">Track Order</button>
+    <button class="history-btn" (click)="navigateToHistory()" aria-label="View purchase history">View History</button>
+    <button class="logout-btn" (click)="logout()" aria-label="Logout">Logout</button>
+  </div>
+</header>
+<div class="dashboard-container">
+  <h1>Welcome to Frostland</h1>
+  <div class="category-buttons">
+    <button class="category-btn" [class.active]="selectedCategory === 'Cakes'" (click)="showCategory('Cakes')" aria-label="Show Cakes">Cakes</button>
+    <button class="category-btn" [class.active]="selectedCategory === 'Cookies'" (click)="showCategory('Cookies')" aria-label="Show Cookies">Cookies</button>
+    <button class="category-btn" [class.active]="selectedCategory === 'Chocolate'" (click)="showCategory('Chocolate')" aria-label="Show Chocolates">Chocolates</button>
+    <button class="category-btn" [class.active]="selectedCategory === 'Puddings'" (click)="showCategory('Puddings')" aria-label="Show Puddings">Puddings</button>
+    <button class="category-btn" [class.active]="selectedCategory === 'Brownies and Dessert'" (click)="showCategory('Brownies and Dessert')" aria-label="Show Desserts">Desserts</button>
+    <button class="category-btn" [class.active]="selectedCategory === 'Cupcakes'" (click)="showCategory('Cupcakes')" aria-label="Show Cupcakes">Cupcakes</button>
+  </div>
+
+  <div class="content-area" *ngIf="selectedItem; else categoryView">
+    <button class="back-btn" (click)="selectedItem = null" aria-label="Back to category view">Back to Category</button>
+    <div class="item-details">
+      <img [src]="'data:image/jpeg;base64,' + selectedItem.image" alt="{{ selectedItem.name }}" class="item-image">
+      <div class="item-info">
+        <h2>{{ selectedItem.name }}</h2>
+        <p><strong>Price:</strong> ₹{{ selectedItem.price }}</p>
+        <p><strong>Description:</strong> {{ selectedItem.description }}</p>
+        <p><strong>Weight:</strong> {{ selectedItem.weight }} kg</p>
+        <p><strong>Category:</strong> {{ selectedItem.category }}</p>
+        <p><strong>Available Quantity:</strong> {{ selectedItem.quantity }}</p>
+      </div>
+      <div class="cart-section">
+        <p *ngIf="message" [style.color]="messageColor">{{ message }}</p>
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" [(ngModel)]="quantity" min="1" [max]="selectedItem.quantity" (input)="checkQuantity()" aria-label="Select quantity">
+        <button class="add-to-cart-btn" [disabled]="!isAddToCartEnabled || quantity > selectedItem.quantity" (click)="addToCart()" [attr.aria-label]="'Add ' + quantity + ' ' + selectedItem.name + ' to cart'">Add to Cart</button>
+        <p *ngIf="!isAddToCartEnabled && !message" class="error-message">Please select a valid quantity (1 to {{ selectedItem.quantity }}).</p>
+      </div>
+    </div>
+  </div>
+  <ng-template #categoryView>
+    <h2>Explore {{ selectedCategory }}</h2>
+    <div class="card-container">
+      <div class="card" *ngFor="let cake of filteredCakes">
+        <img [src]="'data:image/jpeg;base64,' + cake.image" alt="{{ cake.name }}" class="card-image">
+        <div class="card-content">
+          <h3>{{ cake.name }}</h3>
+          <p class="price">₹{{ cake.price }}</p>
+          <button class="view-btn" (click)="selectItem(cake)" [attr.aria-label]="'View details of ' + cake.name">View</button>
+        </div>
+      </div>
+      <p *ngIf="filteredCakes.length === 0">No items found in this category.</p>
+    </div>
+  </ng-template>
+</div>
